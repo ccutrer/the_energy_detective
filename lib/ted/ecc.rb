@@ -5,6 +5,7 @@ require 'net/http'
 require 'nokogiri'
 
 require 'ted/mtu'
+require 'ted/object_hash'
 require 'ted/spyder'
 
 module TED
@@ -220,7 +221,7 @@ module TED
       end
 
       group_index = 1
-      @spyders = {}
+      @spyders = ObjectHash.new
       xml.css("Spyder").each do |spyder_xml|
         enabled = spyder_xml.at_css("Enabled").text == '1'
         if !enabled
@@ -264,7 +265,7 @@ module TED
         groups.each { |group| group.instance_variable_set(:@spyder, spyder) }
       end
 
-      @mtus = {}
+      @mtus = ObjectHash.new
       mtus.each { |mtu| @mtus[mtu.index] = @mtus[mtu.description] = mtu; mtu.spyders.freeze }
     end
 
