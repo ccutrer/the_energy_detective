@@ -272,7 +272,6 @@ module TED
       uri = @host.merge(path)
 
       uri.query = self.class.hash_to_query(params) if params
-      puts uri
       get = Net::HTTP::Get.new(uri)
       get.basic_auth @user, @password if @user
       response = @http.request(get)
