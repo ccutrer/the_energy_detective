@@ -53,6 +53,28 @@ module TED
       dashboard_data(Nokogiri::XML(query("api/DashData.xml", params)))
     end
 
+    def system_overview
+      xml = Nokogiri::XML(query("api/SystemOverview.xml", T: 0))
+      result = ObjectHash.new
+      (1..4).each do |i|
+        mtu = {}
+        mtu_xml = xml.at_css("MTU#{i}")
+        mtu[:power] = mtu_xml.at_css("Value").text.to_i
+        mtu[:apparent_power] = mtu_xml.at_css("KVA").text.to_i
+        mtu[:power_factor] = mtu_xml.at_css("PF").text.to_i / 100.0
+        voltage_xml = mtu_xml.at_css("PhaseVoltage")
+        current_xml = mtu_xml.at_css("PhaseCurrent")
+        mtu[:voltage] = {}
+        mtu[:current] = {}
+        %w{A B C}.each do |phase|
+          mtu[:voltage][phase.to_sym] = voltage_xml.at_css(phase).text.to_i / 10.0
+          mtu[:current][phase.to_sym] = current_xml.at_css(phase).text.to_i / 10.0
+        end
+        result[i - 1] = result[mtus[i - 1].description] = mtu
+      end
+      result
+    end
+
     # A hash of the MTUs[rdoc-ref:MTU] connected to this ECC.
     # It is indexed by both description and numerical index
     def mtus
