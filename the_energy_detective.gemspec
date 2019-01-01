@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{lib}/**/*"] + ["Rakefile"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency 'nokogiri', '~> 1.6.6.2'
+  s.add_dependency 'nokogiri', '~> 1.9'
 
-  s.add_development_dependency 'rake', '~> 10.4.2'
+  s.add_development_dependency 'rake', '~> 12.3'
 end
